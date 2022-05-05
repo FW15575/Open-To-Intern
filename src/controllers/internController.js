@@ -1,9 +1,13 @@
 const internModel = require("../models/internModel")
 const validator = require('validator')
+
 const { default: mongoose } = require("mongoose")
 const collegeModel = require("../models/collegeModel")
 const isValidObjectId = (ObjectId) =>{return mongoose.Types.ObjectId.isValid(ObjectId)}
 let isValid= /\d/
+
+let isValidMobile = /^[6-9]\d{9}$/
+
 const createIntern = async function(req,res){
     try{
     const data = req.body
@@ -15,6 +19,10 @@ const createIntern = async function(req,res){
     if(!data.name){
         return res.status(400).send({ status: false, msg: "Please Provide name"})
 
+    }
+
+    if(isValid.test(data.name)){
+      return res.status(400).send({status:false,msg:'Name Should not contain Numbers'})
     }
     if (!data.email){
       return res.status(400).send({ status: false, msg: " Please Provide email" });
@@ -33,8 +41,8 @@ const createIntern = async function(req,res){
     if(data.mobile.length !== 10) return res.status(400).send({status:false ,msg:"enter valid mobile no"})
   
    
-    if ( !isValid.test(data.mobile)){
-      return res.status(400).send({ status: false, msg: "no. should be a digit"})
+    if ( !isValidMobile.test(data.mobile)){
+      return res.status(400).send({ status: false, msg: "Mobile no. should be a digit"})
     }
     let uniqueNo = await internModel.findOne({ mobile: data.mobile });
      if(uniqueNo) return res.status(400).send({status:false ,msg:"mobileNo. already exist"})
