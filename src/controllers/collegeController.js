@@ -57,12 +57,20 @@ const getCollegeDetails = async function(req,res){
 
         if(!data) return res.status(400).send({status:true,msg:"please provide query"})
 
-        let saveId = await collegeModel.findOne({name:data,isDeleted:false}).select({_id:1,name:1,fullName:1,logoLink:1})
+        let saveId = await collegeModel.findOne({name:data,isDeleted:false}).select({name:1,fullName:1,logoLink:1})
         if(!saveId) return res.status(404).send({status:false,msg:"college Not Found"})
        
        let intrested = await internModel.find({collegeId:saveId._id, isDeleted:false}).select({name:1,email:1,mobile:1})
-       if(!intrested) return res.status(404).send({status:false,msg:"Intern Not Found"})
-        return res.status(200).send({status:true ,data:saveId,intrested})
+       if(intrested.length !==0) {
+             let info = {  
+                 name : saveId.name,
+               fullName : saveId.fullName,
+               logoLink : saveId.logoLink,
+               interests: intrested
+           }
+           return res.status(200).send({status:true ,data:info})
+       }
+        
 
 
     }catch(err){

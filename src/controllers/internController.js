@@ -48,14 +48,16 @@ const createIntern = async function(req,res){
      if(uniqueNo) return res.status(400).send({status:false ,msg:"mobileNo. already exist"})
 
     
-    if(!data.collegeId){
-        return res.status(400).send({ status: false, msg: "Please Provide collegeId"})  
-    }
+    // if(!data.collegeId){
+    //     return res.status(400).send({ status: false, msg: "Please Provide collegeId"})  
+    // }
 
-    let collegedata = await collegeModel.findById(data.collegeId)
-    if(!(isValidObjectId(data.collegeId) && collegedata)) {
-      return res.status(400).send({ status: false, msg: "Please Provide valid CollegeId" });
+    let collegedata = await collegeModel.findOne({name:data.collegeName})
+    if(!collegedata) {
+      return res.status(400).send({ status: false, msg: "Please Provide valid CollegeName" });
     }
+     data["collegeId"] = collegedata._id
+     delete data.collegeName
 
     const internCreation = await internModel.create(data)
     return res.status(201).send({ status: true, data: internCreation });
