@@ -23,6 +23,12 @@ const createColleges = async function (req, res) {
         if(isValid.test(data.name)){       
             return res.status(400).send({status:false,message:'Name Should not contain Numbers'})
         }
+
+        const checkName = await collegeModel.findOne({ name:data.name });
+        if (checkName){
+          return res.status(400).send({ status: false, message: "This name is already exist"})
+        } 
+
         if (!data.fullName) {
             return res.status(400).send({ status: false, message: " Please Provide  fullName" });
         }

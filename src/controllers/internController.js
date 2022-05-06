@@ -3,7 +3,7 @@ const validator = require('validator')
 
 const { default: mongoose } = require("mongoose")
 const collegeModel = require("../models/collegeModel")
-const isValidObjectId = (ObjectId) =>{return mongoose.Types.ObjectId.isValid(ObjectId)}
+
 let isValid= /\d/
 
 let isValidMobile = /^[6-9]\d{9}$/
