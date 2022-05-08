@@ -80,7 +80,10 @@ const getCollegeDetails = async function(req,res){
                interests: intrested
            }
            return res.status(200).send({status:true ,data:info})
+       }else{
+           res.status(404).send({status:false,message:"intern Not Found"})
        }
+
         
 
 
